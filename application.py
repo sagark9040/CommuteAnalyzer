@@ -91,4 +91,4 @@ def run_all_combinations():
 def generate_map_url(origin, destination):
 	return "https://www.google.com/maps/dir/" + origin + "/" + destination
 
-run_all_combinations()
+#run_all_combinations()
