@@ -19,7 +19,9 @@ cnxn = pyodbc.connect(
     'DRIVER=' + driver + ';SERVER=' + server + ';PORT=1433;DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
 cursor = cnxn.cursor()
 
-homes = {"1117 NW 56th St, Seattle, WA 98107", "806-NW-63rd-St-98107"}
+homes = {"1117 NW 56th St, Seattle, WA 98107", "806-NW-63rd-St-98107", "6543-24th-Ave-NW-98117", "641-NW-85th-St-98117",
+         "2222-NW-64th-St-98107", "2649-NW-56th-St-98107", "4312-Whitman-Ave-N-98103", "3614-Leary-Way-NW-98107",
+         "8340-Mary-Ave-NW-98117"}
 offices = {"3009 157th Pl NE, Redmond, WA 98052"}
 
 fmt = "%Y-%m-%d %H:%M:%S"

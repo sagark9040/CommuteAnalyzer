@@ -3,6 +3,7 @@ import pyodbc
 import requests
 import json
 import sys
+import logging
 from datetime import datetime
 from pytz import timezone
 from flask import Flask
@@ -16,7 +17,7 @@ driver= '{ODBC Driver 17 for SQL Server}'
 cnxn = pyodbc.connect('DRIVER='+driver+';SERVER='+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password)
 cursor = cnxn.cursor()
 
-homes = {"1117 NW 56th St, Seattle, WA 98107", "806-NW-63rd-St-98107"}
+homes = {"1117 NW 56th St, Seattle, WA 98107", "806-NW-63rd-St-98107", "6543-24th-Ave-NW-98117", "641-NW-85th-St-98117", "2222-NW-64th-St-98107", "2649-NW-56th-St-98107", "4312-Whitman-Ave-N-98103", "3614-Leary-Way-NW-98107", "8340-Mary-Ave-NW-98117" }
 offices = {"3009 157th Pl NE, Redmond, WA 98052"}
 
 fmt = "%Y-%m-%d %H:%M:%S"
@@ -28,11 +29,11 @@ def init():
 	cursor.execute("SELECT count(*) FROM CommuteAnalyzer")
 	all_data = 'number of rows -->'
 	all_data += str(cursor.fetchone()[0])
-	all_data += '\n'
 	return all_data
 
 @app.route("/")
 def run():
+	logging.basicConfig(level=logging.DEBUG)
 	all_data = init()
 
 	#only concerned window. Else break
@@ -41,12 +42,15 @@ def run():
 		run_all_combinations()
 
 		cursor.execute("SELECT * FROM CommuteAnalyzer")
+		logging.debug ("Inside Commute Window --> " + str(cursor.fetchone()[0]))
+
 		for row in cursor.fetchall():
 			all_data += str(row)
 			all_data += '\n'
 
 	else:
 		all_data = "outside the daily commute window " + all_data
+		logging.debug (all_data)
 	return all_data
 
 @app.route("/force")
@@ -59,7 +63,7 @@ def force_run():
 	cursor.execute("SELECT * FROM CommuteAnalyzer")
 	for row in cursor.fetchall():
 		all_data += str(row)
-		all_data += '\n'
+		all_data += '\n\n'
 
 	return all_data
 
@@ -152,5 +156,5 @@ def run_all_combinations():
 def generate_map_url(origin, destination):
 	return "https://www.google.com/maps/dir/" + origin + "/" + destination
 
-print(run())
+#print(force_run())
 #temp()
